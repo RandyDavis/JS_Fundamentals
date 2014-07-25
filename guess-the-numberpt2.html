@@ -1,0 +1,195 @@
+<html>
+<head>
+  <title>Guess the Number!</title>
+</head>
+<body>
+  <label>Pick a Number from 1-100: </label>
+  <label id="response"></label><br>
+  <label id="feedback"></label>&nbsp;&nbsp;
+  <label id="landmine"></label>&nbsp;&nbsp;
+  <br />
+  <input id="user-input" type="text" />
+  <input id="submit-button" type="button" value="Guess">
+  <script src="http://ajax.googleapis.com/ajax/libs/jquery/1.10.2/jquery.min.js"></script>
+  <script type="text/javascript">
+     
+      var secretNumber;
+      var landmineNumber = [];
+      var input;
+      var closestMine;
+
+      function nums() {
+        secretNumber = parseInt(Math.random() * 100, 10) + 1;
+        landmineNumber[0] = parseInt(Math.random() * 100, 10) + 1;
+        landmineNumber[1] = parseInt(Math.random() * 100, 10) + 1;
+        landmineNumber[2] = parseInt(Math.random() * 100, 10) + 1;
+        // console.log("secret: " + secretNumber + " landmine: " + landmineNumber);
+        for (var i =0; i < landmineNumber.length; ++i) {
+          if (secretNumber === landmineNumber[i]) {
+          nums() }
+        }
+      }
+      function numDiff() {
+        closestMine = undefined
+        // console.log("landmine numbers: " + landmineNumber);
+        $.each(landmineNumber, function(index, value) {
+          if (closestMine === undefined || Math.abs(value - input) < Math.abs(closestMine - input)) {
+            closestMine = value
+          }
+        });
+        closestMine = Math.abs(closestMine - input)
+        // console.log(closestMine);
+      }
+
+      function inputNum() {
+          input = +$('#user-input').val();
+          $('#response').text('You typed in - ' + input);
+
+        if ($.inArray(input, landmineNumber) > -1) {
+          $('#response').text("Oops! You hit a landmine! BOOM!");
+          nums();
+        } else if (input > secretNumber) {
+          numDiff();
+          $('#response').text("Nope! The secret number is lower; try again! Be careful, there is a landmine " + closestMine + " places away from your last input!");
+          $('#user-input').val("");
+        } else if (input < secretNumber) {
+          numDiff();
+            $('#response').text("Nope! The secret number is higher; try again! Be careful, there is a landmine " + closestMine  + " places away from your last input!");
+            $('#user-input').val("");
+        } else { $('#response').text("You guessed the secret number!"); 
+          nums();
+        };
+        }
+
+        nums();
+
+      $('#submit-button').on('click', function (e) {
+        inputNum();
+      });
+
+
+  //   var secretNumber;
+  //   // console.log("Global scope defined secret number: " + secretNumber);
+  //   var landmineNumber = [];
+  //   var closestMine;
+  //   var input;                              //.val()
+  //   // var boom;
+
+  //   function nums(){
+  //     secretNumber = parseInt(Math.random() * 100, 10) + 1;
+  //     // console.log(secretNumber);
+  //     landmineNumber[0] = parseInt(Math.random() * 100, 10) + 1;
+  //     landmineNumber[1] = parseInt(Math.random() * 100, 10) + 1;
+  //     landmineNumber[2] = parseInt(Math.random() * 100, 10) + 1;
+  //     // boom = 0;
+  //     for (var i= 0; i < landmineNumber.length; i++) {
+  //       if (secretNumber === landmineNumber[i]) {
+  //         nums();
+  //       }
+  //     }
+  //   }
+
+
+  //   function numDiff(){
+  //     closestMine = undefined;
+  //     $.each(landmineNumber, function(index, value) {
+  //       if (closestMine === undefined || Math.abs(value - input) < Math.abs(closestMine - input)) {
+  //         closestMine = value;
+  //       }
+  //     });
+  //     closestMine = Math.abs(closestMine - input)
+  //     // console.log(closestMine);
+  //   }
+
+
+
+  //   function inputNum(){
+  //     input = +$('#user-input').val();
+  //     $('#response').text('You typed in - ' + input);
+  //     if ($.inArray(input, landmineNumber) > -1) {
+  //       $('#feedback').text("You hit the landmine, GAME OVER!");
+  //       nums(); 
+  //     } 
+  //     else if(input > secretNumber) {
+  //       numDiff();
+  //       $('#feedback').text('Pick lower! There is a landmine ' + closestMine + ' places away!');
+  //       $('#user-input').val("");
+  //     }
+  //     else if(input < secretNumber) {
+  //       numDiff();
+  //       $('#feedback').text('Pick higher! There is a landmine ' + closestMine + ' places away!');
+  //       $('#user-input').val("");
+  //     }
+  //     else {
+  //       $('#response').text("You guessed the secret number!");
+  //       nums();
+  //     }
+  //   }
+
+  //   nums();
+
+  // $('#submit-button').on('click', function(e){
+  //   inputNum();
+    
+  // });
+
+
+
+
+
+  //   var result = function(input){
+  //     // console.log("Inner scope defined secret number: " + secretNumber);
+  //     if(input > secretNumber){
+  //       $('#feedback').text('Pick lower');
+  //       if(input > landmine){
+  //         boom = input - landmine;
+  //         $('#landmine').text('You are ' + boom + ' spots from the landmine');      //.text 
+  //         input = $('#response').text("Enter a number lower than " + input);     //.text 
+  //         result();
+  //       }
+  //       else if(input < landmine){
+  //         boom = landmine - input;
+  //         $('#landmine').text("You are " + boom + " spots from the landmine");      //.text 
+  //         input = $('#response').text("Enter a number lower than " + input);     //.text 
+  //         result();
+  //       }
+  //       else if(input == landmine){
+  //         $('#feedback').text("You hit the landmine, GAME OVER!");                  //.text 
+  //       }
+  //       result();
+  //    }
+  //     else if(input < secretNumber){
+  //       $('#feedback').text('Pick higher');
+  //       if(input > landmine){
+  //         boom = input - landmine;
+  //         $('#landmine').text("You are " + boom + " spots from the landmine");      //.text 
+  //         input = $('#response').text("Enter a number lower than " + input);     //.text 
+  //         result();
+  //       }
+  //       else if(input < landmine){
+  //         boom = landmine - input;
+  //         $('#landmine').text("You are " + boom + " spots from the landmine");      //.text 
+  //         input = $('#response').text("Enter a number higher than " + input);    //.text 
+  //         result();
+  //       }
+  //       else if(input == landmine){
+  //         $('#feedback').text("You hit the landmine, GAME OVER!");                  //.text 
+  //         $('#landmine').text("");
+  //       }
+  //     }
+  //     else {
+  //       $('#feedback').text("Congratulations!  You win!");                          //.text 
+  //     }
+  //   };  
+  //  result();
+  
+  // $('#submit-button').on('click', function(e){
+  //   var input = $('#user-input').val();
+  //   $('#response').text('You typed in - ' + input);
+  //   result(input);
+  // });
+
+  </script>
+
+</body>
+</html>

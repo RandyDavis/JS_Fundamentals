@@ -1,0 +1,30 @@
+<html>
+<head>
+  <title>Javascript Bare</title>
+</head>
+<body>
+
+<script type="text/javascript">
+  var attempts = 0;
+  login = function(){
+    if(attempts === 3){
+      alert("No more attempts!");
+    }
+    else {
+      attempts++;
+      var password = prompt("Enter your password");
+      if(password === '1234') {
+        alert("Access Granted");
+      } 
+      else
+      {
+        alert("Access Denied!");
+        login();
+      }
+    }
+  }
+  login();
+</script>
+
+</body>
+</html>
